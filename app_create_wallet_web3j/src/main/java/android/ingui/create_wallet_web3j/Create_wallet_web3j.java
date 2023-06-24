@@ -24,14 +24,25 @@ public class Create_wallet_web3j extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_wallet);
         try {
-            getWriteStoragePermission();
-            if (setupBouncyCastle()) {
-                create_wallet("12345", "/android.ingui.create_wallet_web3j/assets/re");
+//            getWriteStoragePermission();
+            if (setupBouncyCastle() == false) {
+                throw new RuntimeException("Error on setupBouncyCastle() ");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            create_wallet("12345", "/android.ingui.create_wallet_web3j/assets/re");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean setupBouncyCastle() {
         final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
         if (provider == null) {
@@ -62,7 +73,7 @@ public class Create_wallet_web3j extends AppCompatActivity {
         }
         if (file.exists()) {
             if (file.isDirectory()) {
-                String nombre_de_archivo = WalletUtils.generateNewWalletFile(password, file);
+                String nombre_de_archivo = WalletUtils.generateLightNewWalletFile(password, file);
                 result = new File(file, nombre_de_archivo);
             } else {
                 return null;
@@ -72,31 +83,32 @@ public class Create_wallet_web3j extends AppCompatActivity {
         }
         return result;
     }
-    private Boolean getWriteStoragePermission() {
-        if (ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            String [] strings_array = {WRITE_EXTERNAL_STORAGE};
-            requestPermissions(strings_array, ID_REQUEST_PERMISSIONS_CODE_WRITE_STORAGE);
-        }
-        return true;
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean is_granted = false;
-        switch (requestCode) {
-        case ID_REQUEST_PERMISSIONS_CODE_WRITE_STORAGE:
-            if (grantResults.length > 0) {
-                is_granted = true;
-                for (int result: grantResults) {
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        is_granted = false;
-                    }
-                }
-            }
-            if (is_granted == false) {
-                throw new RuntimeException("Permission not Granted: " + "WRITE_EXTERNAL_STORAGE");
-            }
-        }
-    }
+//    private Boolean getWriteStoragePermission() {
+//        if (ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            String [] strings_array = {WRITE_EXTERNAL_STORAGE};
+//            requestPermissions(strings_array, ID_REQUEST_PERMISSIONS_CODE_WRITE_STORAGE);
+//        }
+//        return true;
+//    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                                           int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        boolean is_granted = false;
+//        switch (requestCode) {
+//        case ID_REQUEST_PERMISSIONS_CODE_WRITE_STORAGE:
+//            if (grantResults.length > 0) {
+//                is_granted = true;
+//                for (int result: grantResults) {
+//                    if (result != PackageManager.PERMISSION_GRANTED) {
+//                        is_granted = false;
+//                        break;
+//                    }
+//                }
+//            }
+//            if (is_granted == false) {
+//                throw new RuntimeException("Permission not Granted: " + "WRITE_EXTERNAL_STORAGE");
+//            }
+//        }
+//    }
 }
