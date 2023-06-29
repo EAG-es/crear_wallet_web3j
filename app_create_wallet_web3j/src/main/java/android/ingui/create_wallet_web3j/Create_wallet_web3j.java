@@ -53,8 +53,8 @@ public class Create_wallet_web3j extends AppCompatActivity {
             return false;
         }
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
-        org.bouncycastle.jce.provider.BouncyCastleProvider bouncyCastleProvider = new org.bouncycastle.jce.provider.BouncyCastleProvider();
-//            org.spongycastle.jce.provider.BouncyCastleProvider bouncyCastleProvider = new org.spongycastle.jce.provider.BouncyCastleProvider();
+//        org.bouncycastle.jce.provider.BouncyCastleProvider bouncyCastleProvider = new org.bouncycastle.jce.provider.BouncyCastleProvider();
+            org.spongycastle.jce.provider.BouncyCastleProvider bouncyCastleProvider = new org.spongycastle.jce.provider.BouncyCastleProvider();
         Security.insertProviderAt(bouncyCastleProvider, 1);
         return true;
     }
